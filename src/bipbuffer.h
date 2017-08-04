@@ -50,4 +50,7 @@ int bb_commit(struct bipbuffer *buffP, long int size);
 // read 'size' bytes data into dst from bipbuffer
 long int bb_read(struct bipbuffer *buffP, void *dst, long int size);
 
+// the same as 'bb_read', but it won't remove data from the buffer
+long int bb_look(struct bipbuffer *bip, void *dst, long int size);
+
 #endif

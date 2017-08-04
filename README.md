@@ -34,6 +34,9 @@ int bb_commit(struct bipbuffer *buffP, long int size);
 
 // read 'size' bytes data from buffer
 long int bb_read(struct bipbuffer *buffP, void *dst, long int size);
+
+// the same as 'bb_read', but it won't remove the data from the buffer
+long int bb_look(struct bipbuffer *buffP, void *dst, long int size);
 ```
 
 you can see more details in `bipbuffer.h`(I guess you need them).

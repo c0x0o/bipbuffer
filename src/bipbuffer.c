@@ -92,17 +92,55 @@ int bb_commit(struct bipbuffer *bip, long int used) {
     return 0;
 }
 
+long int bb_look(struct bipbuffer *bip, void *dst, long int size) {
+    struct region *reader = get_read_region(bip);
+    struct region *writer = get_write_region(bip);
+    long int have_read = 0;
+
+    if (size <= get_region_length(reader)) {
+        memcpy(dst, bip->data+reader->start, size);
+        have_read += size;
+    } else {
+        if (reader == writer ||
+            size > get_region_length(writer)+get_region_length(reader)) {
+            // no enough data for this read
+            return -1;
+        }
+
+        // cross region read
+
+        // read first part
+        have_read = get_region_length(reader);
+        memcpy(dst, bip->data+reader->start, have_read);
+        reset_region(reader);
+
+        // change reader
+        if (bip->read_from == 0) {
+            reader = &bip->b;
+        } else {
+            reader = &bip->a;
+        }
+
+        // read another part
+        memcpy(dst+have_read, bip->data+reader->start, size - have_read);
+        have_read = size;
+    }
+
+    return have_read;
+}
+
 long int bb_read(struct bipbuffer *bip, void *dst, long int size) {
     struct region *reader = get_read_region(bip);
     struct region *writer = get_write_region(bip);
     long int have_read = 0;
 
-    if (size < get_region_length(reader)) {
+    if (size <= get_region_length(reader)) {
         memcpy(dst, bip->data+reader->start, size);
         have_read += size;
         reader->start += size;
     } else {
-        if (reader == writer) {
+        if (reader == writer ||
+            size > get_region_length(writer)+get_region_length(reader)) {
             // no enough data for this read
             return -1;
         }
