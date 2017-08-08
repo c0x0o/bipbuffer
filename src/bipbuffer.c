@@ -167,5 +167,9 @@ long int bb_read(struct bipbuffer *bip, void *dst, long int size) {
         reader->start += size;
     }
 
+    if (reader->start == reader->end) {
+        reset_region(reader);
+    }
+
     return have_read;
 }
