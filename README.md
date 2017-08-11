@@ -36,6 +36,7 @@ int bb_commit(struct bipbuffer *buffP, long int size);
 long int bb_read(struct bipbuffer *buffP, void *dst, long int size);
 
 // the same as 'bb_read', but it won't remove the data from the buffer
+// if you only want to know whether there is enough data in buffer, pass a NULL to 'dst'
 long int bb_look(struct bipbuffer *buffP, void *dst, long int size);
 ```
 
