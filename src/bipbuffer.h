@@ -1,6 +1,10 @@
 #ifndef BIPBUFFER_BIPBUFFER_H_
 #define BIPBUFFER_BIPBUFFER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -52,5 +56,9 @@ long int bb_read(struct bipbuffer *buffP, void *dst, long int size);
 
 // the same as 'bb_read', but it won't remove data from the buffer
 long int bb_look(struct bipbuffer *bip, void *dst, long int size);
+
+#ifdef __cplusplus
+} // end of extern "C"
+#endif
 
 #endif
